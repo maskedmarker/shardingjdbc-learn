@@ -26,6 +26,14 @@
         <spring-boot-maven-plugin.version>2.4.3</spring-boot-maven-plugin.version>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <!--spring-boot/cloud的依赖管理基本独立的-->

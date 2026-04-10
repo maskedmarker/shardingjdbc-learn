@@ -18,3 +18,19 @@ curl -X POST http://localhost:9080/orders   -H "Content-Type: application/json" 
 
 http://localhost:9080/h2-console
 ```
+
+```text
+Spring Boot 2.3+ 版本对配置属性的命名要求更严格了，需要使用 kebab-case（短横线命名），不能使用下划线。
+
+Description:
+
+Configuration property name 'spring.shardingsphere.datasource.ds_0' is not valid:
+
+    Invalid characters: '_'
+    Bean: org.apache.shardingsphere.shardingjdbc.spring.boot.SpringBootConfiguration
+    Reason: Canonical names should be kebab-case ('-' separated), lowercase alpha-numeric characters and must start with a letter
+
+Action:
+
+Modify 'spring.shardingsphere.datasource.ds_0' so that it conforms to the canonical names requirements.
+```
