@@ -1,13 +1,50 @@
+server:
+  port: 9080
+
 spring:
   application:
     name: sharding-jdbc-demo
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  shardingsphere:
+    props:
+      sql.show: true
+    datasource:
+      names: ds0,ds1
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.175.129:3306/ds0?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8
+        username: root
+        password: 123456
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.175.129:3306/ds1?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8
+        username: root
+        password: 123456
+    # 分片规则配置
+    sharding:
+      tables:
+        # 逻辑表名称
+        t_order:
+          # 实际数据节点，使用行表达式描述物理表分布
+          actual-data-nodes: ds$->{0..1}.t_order_$->{0..1}
+          # 分表策略
+          table-strategy:
+            inline:
+              # 分片键
+              sharding-column: order_id
+              # 分表表达式
+              algorithm-expression: t_order_$->{order_id % 2}
+          # 分库策略
+          database-strategy:
+            inline:
+              # 分片键
+              sharding-column: user_id
+              # 分库表达式
+              algorithm-expression: ds$->{user_id % 2}
+
+
 
 mybatis:
   mapper-locations: classpath:mappers/*.xml
   type-aliases-package: com.example.sharding.entity
-
-server:
-  port: 8080
